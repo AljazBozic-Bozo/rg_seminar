@@ -42,8 +42,6 @@ class App extends Application {
         this.scene.health = 100;
         
         
-        this.createTower()
-    
         this.renderer = new Renderer(this.gl);
         this.renderer.prepareScene(this.scene);
         this.resize();
@@ -51,7 +49,15 @@ class App extends Application {
 
         //console.log(this.scene);
 
-        this.fun();
+        if(this.scene){
+            this.createTower(4);
+            this.createTower(5);
+            this.createTower(6);
+            //this.createTower(7);
+            //this.createTower(8);
+            //this.createTower(9);
+            this.fun();
+        }
         //this.createWave(5);
     }
     
@@ -104,8 +110,10 @@ class App extends Application {
         }
         if(this.scene && this.scene.bullets.length > 0){
             for(const bullet of this.scene.bullets){
-                bullet.update(dt);
-                bullet.updateMatrix();
+                if(bullet){
+                    bullet.update(dt);
+                    bullet.updateMatrix();
+                }
             }
         }
         if(this.scene && this.scene.enemies.length > 0){
@@ -115,8 +123,11 @@ class App extends Application {
             }
         }
 
-        if (this.physics) {
-            this.physics.update(dt);
+        if(this.scene && this.scene.towers.length > 0){
+            for(const tower of this.scene.towers){
+                tower.update();
+                tower.updateMatrix();
+            }
         }
     }
 
@@ -142,7 +153,6 @@ class App extends Application {
         //console.log(this.camera);
         const m = this.camera.matrix.map((x) => x);
         let bullet = new Bullet(m, this.scene.nodes[21].mesh);
-        //bullet.createBullet();
         this.scene.bullets.push(bullet);
     }
     
@@ -167,10 +177,8 @@ class App extends Application {
         
     }
 
-    createTower(){
-        console.log(this.scene.nodes[4]);
-        const tr = this.scene.nodes[4].translation.map((x) => x);
-        console.log(tr);
+    createTower(node){
+        const tr = this.scene.nodes[node].translation.map((x) => x);
         let tower = new Tower(tr, this.scene);
         
         this.scene.towers.push(tower);

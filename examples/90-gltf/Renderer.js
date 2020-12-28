@@ -190,7 +190,7 @@ export default class Renderer {
     
         for(const bullet of scene.bullets){
             //console.log(bullet);
-            this.renderNode(bullet, mvpMatrix);
+            if(bullet)this.renderNode(bullet, mvpMatrix);
         }
 
         for(const enemy of scene.enemies){

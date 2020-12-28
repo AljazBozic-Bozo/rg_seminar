@@ -8,16 +8,11 @@ export default class Enemy extends Node{
     
     constructor(tr, scene){
         super(tr);
-        //this.matrix = matrix;
-        //console.log("Bullet initialised");
+
         this.translation = tr;
         this.scale = [0.5,0.5,0.5];
         this.scene = scene;
-        //this.translation[-5,-8,0];
         this.updateMatrix();
-        //this.updateTransform();
-        
-        //console.log(this.translation);
         
         this.alive = true;
 
@@ -26,8 +21,7 @@ export default class Enemy extends Node{
         this.waypoints = scene.waypoints;
         this.health = 10;
 
-
-        this.enemySpeed = 1000;
+        this.enemySpeed = 100;
     }
     start(){
 
