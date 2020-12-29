@@ -23,12 +23,13 @@ export default class Tower extends Node{
 
         vec3.add(this.translation, this.translation, [0,0.5,0]);
         this.scale = [0.5,0.2,0.5];
-        //this.rotation = 
 
         this.scene = scene;
-        this.mesh = scene.nodes[18].mesh;
+        this.mesh = scene.nodes[19].mesh;
 
         this.range = 10;
+        this.fireRate = 2;
+        this.shootCountown = 0;
         
         this.updateMatrix();
         console.log(this);
@@ -37,13 +38,22 @@ export default class Tower extends Node{
 
     }
 
-    update(){
+    update(dt){
         if(this.scene.enemies.length > 0){
-            this.target = this.detectEnemy();
-            if(this.target>=0){
-                this.shoot(this.target);
+            this.detectEnemy();
+            
+            if(this.enemy!==undefined){
                 this.followEnemy();
-                this.updateMatrix();
+                if(this.shootCountown <= 0){
+                    this.shoot(this.enemy);
+                    this.shootCountown = 1/this.fireRate;   
+                }
+                this.shootCountown -= dt;
+
+
+                //this.shoot(this.enemy);
+                //this.followEnemy();
+                //this.updateMatrix();
             }
         }
     }
@@ -53,6 +63,7 @@ export default class Tower extends Node{
         let closestEnemy=-1;
         let enumerate = 0;
         this.scene.enemies.forEach(enemy => {
+            if(enemy){
             const distance = vec3.distance(this.translation, enemy.translation);
             if(distance < this.range && distance<closestDistance){
                 closestDistance = distance;
@@ -60,11 +71,12 @@ export default class Tower extends Node{
                 this.enemy = enemy;
             }
             enumerate++;
+            }
         });
-        return closestEnemy;
+        //return enemy;
     }
 
-    followEnemy(){    
+    followEnemy(){  
         let direction = vec3.create();
         vec3.sub(direction, this.translation, this.enemy.translation);
         vec3.normalize(direction, direction);

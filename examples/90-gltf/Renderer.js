@@ -195,7 +195,7 @@ export default class Renderer {
 
         for(const enemy of scene.enemies){
             //console.log(enemy);
-            if(enemy.alive) this.renderNode(enemy, mvpMatrix);   
+            if(enemy.alive && enemy) this.renderNode(enemy, mvpMatrix);   
         }
 
         for(const tower of scene.towers){

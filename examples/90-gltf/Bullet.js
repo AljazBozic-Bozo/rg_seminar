@@ -21,8 +21,10 @@ export default class Bullet extends Node {
         else if(type=1)this.mesh = this.scene.nodes[20].mesh;
         }
         
-        this.targetId=target;
-        this.target = this.scene.enemies[target];
+        //this.targetId=target;
+        //this.target = this.scene.enemies[target];
+
+        this.target = target;
 
         this.bulletSpeed = 500;
         this.bulletDamage = 1;
@@ -52,13 +54,21 @@ export default class Bullet extends Node {
     }
     colided(){
         const distance = vec3.distance(this.translation, this.target.translation);
-        if(distance<0.8){
+        const targetId = this.scene.enemies.indexOf(this.target);
+        if(this.target.alive && targetId != -1){
+            if(distance<0.8){
+                this.scene.bullets[this.id] = false;
+                this.scene.enemies[targetId].health -= this.bulletDamage;
+            }
+        }
+        else{
             this.scene.bullets[this.id] = false;
-            this.scene.enemies[this.targetId].health -= this.bulletDamage;
-            console.log(this.scene.enemies[this.targetId].health);
         }
 
     }
+    
+
+
 
     followEnemy(dt){
         let direction = vec3.create();

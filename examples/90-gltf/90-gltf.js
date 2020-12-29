@@ -8,7 +8,7 @@ import Tower from './Tower.js';
 import Waypoint from './Waypoint.js';
 
 const mat4 = glMatrix.mat4;
-//let myVar;
+let globalId;
 
 class App extends Application {
 
@@ -33,11 +33,15 @@ class App extends Application {
         this.pointerlockchangeHandler = this.pointerlockchangeHandler.bind(this);
         document.addEventListener("pointerlockchange", this.pointerlockchangeHandler)
         this.clickHandler = this.clickHandler.bind(this);
+        
 
         this.scene.bullets = [];
         this.scene.enemies = [];
         this.scene.waypoints = [];
         this.scene.towers = [];
+
+        this.spawnCountown = 0;
+        this.spawnRate = 1;
 
         this.scene.health = 100;
         
@@ -56,20 +60,17 @@ class App extends Application {
             //this.createTower(7);
             //this.createTower(8);
             //this.createTower(9);
-            this.fun();
+            //this.fun();
         }
-        //this.createWave(5);
+        //for(var i = 0; i<10 ;i++){
+            this.createWave(5);
+        //}
     }
     
-    fun(){
-        setInterval(this.createEnemy(), 1000);
-    }
-    
-
-
     startGame(){
         
     }
+
     intiWaypoints(){
         for(const node of this.scene.nodes){
             
@@ -118,17 +119,30 @@ class App extends Application {
         }
         if(this.scene && this.scene.enemies.length > 0){
             for(const enemy of this.scene.enemies){
-                enemy.update(dt);
-                enemy.updateMatrix();
+                if(enemy){
+                    enemy.update(dt);
+                    enemy.updateMatrix();
+                }
+            }
+            if(this.scene.enemies.length == 1 && !this.scene.enemies[0].alive){
+                this.scene.enemies.pop();
             }
         }
 
         if(this.scene && this.scene.towers.length > 0){
             for(const tower of this.scene.towers){
-                tower.update();
+                tower.update(dt);
                 tower.updateMatrix();
             }
         }
+        if(this.scene){
+            if(this.spawnCountown <= 0){
+                this.createEnemy();
+                this.spawnCountown = 1/this.spawnRate;   
+            }
+            this.spawnCountown -= dt;
+        }
+        
     }
 
     render() {
@@ -148,22 +162,25 @@ class App extends Application {
         }
     }
 
-    clickHandler(e) { //shoot bullet
-        //console.log(this.scene.nodes[22].mesh);
-        //console.log(this.camera);
-        const m = this.camera.matrix.map((x) => x);
-        let bullet = new Bullet(m, this.scene.nodes[21].mesh);
-        this.scene.bullets.push(bullet);
+    clickHandler(e) { 
+        console.log(this.scene.enemies);
     }
     
     createWave(amount){
-        let myVar = setInterval(this.createEnemy(), 2000);
+        this.time = Date.now();
+        const dt = (this.time - this.startTime) * 0.001;
         
-        //const dt = (this.time - this.startTime) * 0.001;
-        //for(let i=0;i<amount;i++){    
-        //    this.createEnemy();
-        //}
+        if(this.spawnCountown <= 0){
+            this.createEnemy();
+            this.spawnCountown = 1/this.spawnRate;   
+        }
+        this.spawnCountown -= dt;
     }
+    
+    repeatOften() {
+        console.log("repeating");
+        globalID = requestAnimationFrame(repeatOften);
+      }
 
 
     createEnemy(){
@@ -171,7 +188,7 @@ class App extends Application {
         //console.log(this.scene);
         const tr = this.scene.nodes[this.startIndex].translation.map((x) => x);
         
-        let enemy = new Enemy(tr, this.scene);
+        let enemy = new Enemy(this.scene.enemies.length, tr, this.scene, 1);
         
         this.scene.enemies.push(enemy);
         

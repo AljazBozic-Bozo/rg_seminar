@@ -138,7 +138,7 @@ export default class CameraNode extends Node{
 
 CameraNode.defaults = {
     aspect           : 1,
-    fov              : 1.5,
+    fov              : 1,
     near             : 0.01,
     far              : 100,
     velocity         : [0, 0, 0],

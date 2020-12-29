@@ -6,9 +6,10 @@ const vec3 = glMatrix.vec3;
 
 export default class Enemy extends Node{
     
-    constructor(tr, scene){
+    constructor(enemyId, tr, scene, type){
         super(tr);
 
+        this.id = enemyId;
         this.translation = tr;
         this.scale = [0.5,0.5,0.5];
         this.scene = scene;
@@ -16,18 +17,21 @@ export default class Enemy extends Node{
         
         this.alive = true;
 
-        this.mesh = scene.nodes[22].mesh;
+        if(type == 0) this.mesh = scene.nodes[22].mesh;
+        if(type == 1) this.mesh = scene.nodes[23].mesh;
+        
         this.waypointIndex = 0;
         this.waypoints = scene.waypoints;
         this.health = 10;
 
-        this.enemySpeed = 100;
+        this.enemySpeed = 200;
     }
     start(){
 
     }
 
     update(dt){
+        this.checkHealth();
         if(this.alive){
             let direction = vec3.create();
             vec3.sub(direction, this.translation, this.waypoints[this.waypointIndex].translation);
@@ -55,6 +59,24 @@ export default class Enemy extends Node{
                     
                 }
             }
+        }
+    }
+
+    checkHealth(){
+        if(this.health<=0){
+            //console.log( this.scene.enemies.indexOf(this));
+            this.alive = false;
+            this.scene.enemies[this.id] = false;
+            console.log("dead");
+            //if(this.id == 0){
+            //    this.scene.enemies.shift();
+            //}
+            //if(this.id == this.scene.enemies.length){
+            //    this.scene.enemies.pop();
+            //}
+            //if (this.id > -1) {
+            //    this.scene.enemies.splice(this.id, 1);
+            //}
         }
     }
 
