@@ -30,7 +30,7 @@ export default class Enemy extends Node{
         this.waypoints = scene.waypoints;
         this.health = 10;
 
-        this.enemySpeed = 200;
+        this.enemySpeed = 500;
         this.updateMatrix();
     }
     start(){

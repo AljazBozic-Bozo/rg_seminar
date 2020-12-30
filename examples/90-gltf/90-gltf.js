@@ -9,6 +9,8 @@ import Waypoint from './Waypoint.js';
 
 const mat4 = glMatrix.mat4;
 let globalId;
+let paused = true;
+document.getElementById("gameOver").style.visibility = "hidden";
 
 class App extends Application {
 
@@ -29,9 +31,18 @@ class App extends Application {
         if (!this.camera.camera) {
             throw new Error('Camera node does not contain a camera reference');
         }
+        
 
         this.pointerlockchangeHandler = this.pointerlockchangeHandler.bind(this);
         document.addEventListener("pointerlockchange", this.pointerlockchangeHandler)
+        
+        //const pauseBtn = document.getElementById("pause");
+        //pauseBtn.addEventListener('click', this.pauseGame());
+        document.getElementById("pause").addEventListener('click', this.pauseGame);
+        document.getElementById("start").addEventListener('click', this.startGame);
+
+        //pauseBtn.clickHandler = this.pauseGame.bind(this);
+
         this.clickHandler = this.clickHandler.bind(this);
         
 
@@ -44,6 +55,7 @@ class App extends Application {
         this.spawnRate = 1;
 
         this.scene.health = 100;
+        this.scene.score = 0;
         
         
         this.renderer = new Renderer(this.gl);
@@ -68,7 +80,18 @@ class App extends Application {
     }
     
     startGame(){
-        
+        paused = false;
+        //console.log("start");
+    }
+    
+    pauseGame(){
+        paused = true;
+        //console.log("paused");
+    }
+
+    endGame(){
+        document.getElementById("gameOver").style.visibility = "visible";
+        paused = true;
     }
 
     intiWaypoints(){
@@ -109,38 +132,50 @@ class App extends Application {
             this.camera.updateMatrix();
             this.resize();
         }
-        if(this.scene && this.scene.bullets.length > 0){
-            for(const bullet of this.scene.bullets){
-                if(bullet){
-                    bullet.update(dt);
-                    bullet.updateMatrix();
-                }
-            }
-        }
-        if(this.scene && this.scene.enemies.length > 0){
-            for(const enemy of this.scene.enemies){
-                if(enemy){
-                    enemy.update(dt);
-                    enemy.updateMatrix();
-                }
-            }
-            if(this.scene.enemies.length == 1 && !this.scene.enemies[0].alive){
-                this.scene.enemies.pop();
-            }
+        if(this.scene && this.scene.health<=0){
+            this.endGame();
         }
 
-        if(this.scene && this.scene.towers.length > 0){
-            for(const tower of this.scene.towers){
-                tower.update(dt);
-                tower.updateMatrix();
+
+        if(!paused){
+            
+            if(this.scene && this.scene.bullets.length > 0){
+                for(const bullet of this.scene.bullets){
+                    if(bullet){
+                        bullet.update(dt);
+                        bullet.updateMatrix();
+                    }
+                }
             }
-        }
-        if(this.scene){
-            if(this.spawnCountown <= 0){
-                this.createEnemy();
-                this.spawnCountown = 1/this.spawnRate;   
+            if(this.scene && this.scene.enemies.length > 0){
+                for(const enemy of this.scene.enemies){
+                    if(enemy){
+                        enemy.update(dt);
+                        enemy.updateMatrix();
+                    }
+                }
+                if(this.scene.enemies.length == 1 && !this.scene.enemies[0].alive){
+                    this.scene.enemies.pop();
+                }
             }
-            this.spawnCountown -= dt;
+
+            if(this.scene && this.scene.towers.length > 0){
+                for(const tower of this.scene.towers){
+                    tower.update(dt);
+                    tower.updateMatrix();
+                }
+            }
+            if(this.scene){
+                if(this.spawnCountown <= 0){
+                    this.createEnemy();
+                    this.spawnCountown = 1/this.spawnRate;   
+                }
+                this.spawnCountown -= dt;
+                
+                document.getElementById("health").innerHTML = this.scene.health;
+                document.getElementById("money").innerHTML = this.scene.health;
+                document.getElementById("score").innerHTML = this.scene.health;
+            }
         }
         
     }
@@ -164,6 +199,8 @@ class App extends Application {
 
     clickHandler(e) { 
         console.log(this.scene.enemies);
+        console.log(paused);
+        
     }
     
     createWave(amount){
