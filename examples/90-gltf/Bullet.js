@@ -17,8 +17,14 @@ export default class Bullet extends Node {
         
         this.scene = scene;
         if(this.scene){
-        if(type=0)this.mesh = this.scene.nodes[21].mesh;
-        else if(type=1)this.mesh = this.scene.nodes[20].mesh;
+            if(type==1){
+                this.mesh = this.scene.nodes[21].mesh;
+                this.bulletDamage = 1;
+            }
+            else if(type==0){
+                this.mesh = this.scene.nodes[20].mesh;
+                this.bulletDamage = 2;
+            }
         }
         
         //this.targetId=target;
@@ -27,7 +33,7 @@ export default class Bullet extends Node {
         this.target = target;
 
         this.bulletSpeed = 500;
-        this.bulletDamage = 1;
+
 
         this.alive = true;
     }

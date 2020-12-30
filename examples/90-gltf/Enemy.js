@@ -11,20 +11,27 @@ export default class Enemy extends Node{
 
         this.id = enemyId;
         this.translation = tr;
-        this.scale = [0.5,0.5,0.5];
+        
         this.scene = scene;
-        this.updateMatrix();
+        
         
         this.alive = true;
 
-        if(type == 0) this.mesh = scene.nodes[22].mesh;
-        if(type == 1) this.mesh = scene.nodes[23].mesh;
+        if(type == 0){ 
+            this.scale = [0.5,0.5,0.5];
+            this.mesh = scene.nodes[22].mesh;
+        }
+        if(type == 1){ 
+            this.scale = [0.3,0.3,0.3];
+            this.mesh = scene.nodes[23].mesh;
+        }
         
         this.waypointIndex = 0;
         this.waypoints = scene.waypoints;
         this.health = 10;
 
         this.enemySpeed = 200;
+        this.updateMatrix();
     }
     start(){
 

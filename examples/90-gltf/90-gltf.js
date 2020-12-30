@@ -54,17 +54,17 @@ class App extends Application {
         //console.log(this.scene);
 
         if(this.scene){
-            this.createTower(4);
-            this.createTower(5);
-            this.createTower(6);
+            this.createTower(4,0);
+            this.createTower(5,0);
+            this.createTower(6,1);
             //this.createTower(7);
             //this.createTower(8);
             //this.createTower(9);
             //this.fun();
         }
-        //for(var i = 0; i<10 ;i++){
-            this.createWave(5);
-        //}
+        
+        //this.createWave(5);
+        
     }
     
     startGame(){
@@ -194,9 +194,9 @@ class App extends Application {
         
     }
 
-    createTower(node){
+    createTower(node, type){
         const tr = this.scene.nodes[node].translation.map((x) => x);
-        let tower = new Tower(tr, this.scene);
+        let tower = new Tower(tr, this.scene, type);
         
         this.scene.towers.push(tower);
         

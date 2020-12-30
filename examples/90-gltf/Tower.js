@@ -12,7 +12,7 @@ const vec3 = glMatrix.vec3;
 
 export default class Tower extends Node{
     
-    constructor(tr, scene){
+    constructor(tr, scene, type){
         super(tr);
         //this.reset();
         //this.updateMatrix();
@@ -20,15 +20,26 @@ export default class Tower extends Node{
         //this.updateTransform();
 
         this.moveTower(tr);
-
-        vec3.add(this.translation, this.translation, [0,0.5,0]);
-        this.scale = [0.5,0.2,0.5];
-
+        this.type = type;
         this.scene = scene;
-        this.mesh = scene.nodes[19].mesh;
+        vec3.add(this.translation, this.translation, [0,0.5,0]);
+        if(type == 0){
+            this.mesh = scene.nodes[18].mesh;
+            this.scale = [0.5,0.2,0.5];
+            this.fireRate = 1.5;
+            this.range = 9;
+        }
+        if(type == 1){
+            this.mesh = scene.nodes[19].mesh;
+            this.scale = [0.15,0.15,0.15];
+            this.fireRate = 3;
+            this.range = 10;
+            //this.rotation = [-0.9,0,0,1];
+        }
 
-        this.range = 10;
-        this.fireRate = 2;
+
+        
+        
         this.shootCountown = 0;
         
         this.updateMatrix();
@@ -86,7 +97,7 @@ export default class Tower extends Node{
     shoot(target){
         const m = this.matrix.map((x) => x);
         const bulletId = this.scene.bullets.length;
-        let bullet = new Bullet(bulletId, m, 1, target, this.scene);
+        let bullet = new Bullet(bulletId, m, this.type, target, this.scene);
         this.scene.bullets.push(bullet);
     }
 
