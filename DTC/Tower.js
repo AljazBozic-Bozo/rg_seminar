@@ -43,7 +43,6 @@ export default class Tower extends Node{
         this.shootCountown = 0;
         
         this.updateMatrix();
-        console.log(this);
     }
     start(){
 

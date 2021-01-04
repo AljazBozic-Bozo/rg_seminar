@@ -200,7 +200,7 @@ export default class Renderer {
 
         for(const tower of scene.towers){
             //console.log(tower);
-            this.renderNode(tower, mvpMatrix);   
+            if(tower) this.renderNode(tower, mvpMatrix);   
         }
     }
 

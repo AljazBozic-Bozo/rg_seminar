@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Defend the city</title>
+
+    <link rel="stylesheet" type="text/css" href="../../common/style.css">
+
+    <script type="text/javascript" src="../../lib/gl-matrix-min.js"></script>
+    <script type="text/javascript" src="../../lib/dat.gui.min.js"></script>
+    <script type="module" src="DTC.js"></script>
+</head>
+<body>
+    <div id="overlay">
+        <div class="stats">Health: <span id="health"></span></div>
+        <div class="stats">Money: <span id="money"></span></div>
+        <div class="stats">Score: <span id="score"></span></div>
+        <div class="stats">Wave: <span id="wave"></span></div>
+        <div>
+        <button id="pause" >Pause</button>
+        <button id="nextWave">Start wave</button>
+        </div>
+        <div>Spot 1 <button class="btn1" id="1-0"> 1  </button> <button class="btn2" id="1-1"> 2  </button> </div>
+        <div>Spot 2 <button class="btn1" id="2-0"> 1  </button> <button class="btn2" id="2-1"> 2  </button> </div>
+        <div>Spot 3 <button class="btn1" id="3-0"> 1  </button> <button class="btn2" id="3-1"> 2  </button> </div>
+        <div>Spot 4 <button class="btn1" id="4-0"> 1  </button> <button class="btn2" id="4-1"> 2  </button> </div>
+        <div>Spot 5 <button class="btn1" id="5-0"> 1  </button> <button class="btn2" id="5-1"> 2  </button> </div>
+        <div>Spot 6 <button class="btn1" id="6-0"> 1  </button> <button class="btn2" id="6-1"> 2  </button> </div>
+        <div>Spot 7 <button class="btn1" id="7-0"> 1  </button> <button class="btn2" id="7-1"> 2  </button> </div>
+        <div>Spot 8 <button class="btn1" id="8-0"> 1  </button> <button class="btn2" id="8-1"> 2  </button> </div>
+        <div>Spot 9 <button class="btn1" id="9-0"> 1  </button> <button class="btn2" id="9-1"> 2  </button> </div>
+        <div>Spot 10<button class="btn1" id="10-0"> 1 </button> <button class="btn2" id="10-1"> 2 </button> </div>
+        <div>Spot 11<button class="btn1" id="11-0"> 1 </button> <button class="btn2" id="11-1"> 2 </button> </div>
+        <div>Spot 12<button class="btn1" id="12-0"> 1 </button> <button class="btn2" id="12-1"> 2 </button> </div>
+        <div>Spot 13<button class="btn1" id="13-0"> 1 </button> <button class="btn2" id="13-1"> 2 </button> </div>
+        <div>Spot 14<button class="btn1" id="14-0"> 1 </button> <button class="btn2" id="14-1"> 2 </button> </div>
+
+        
+    </div>
+    <div id="gameEnd">
+        <div id="gameStart">
+            <div>Defend the city</div>
+            <button id="start">Start Game</button>
+        </div>
+        <div id="gameOver">
+            <div>Game Over!</div>
+        </div>
+        <div id="gameWon">
+            <div>Congratulations you won!</div>
+        </div>
+        <div id="scoreDiv">
+            Your Score Was: <span id="scoreSpan"></span>
+        </div>
+    </div>
+    <div class="fullscreen">
+        <canvas></canvas>
+    </div>
+</body>
+</html>

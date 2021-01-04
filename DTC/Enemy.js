@@ -30,7 +30,7 @@ export default class Enemy extends Node{
         this.waypoints = scene.waypoints;
         this.health = 10;
 
-        this.enemySpeed = 500;
+        this.enemySpeed = 200;
         this.updateMatrix();
     }
     start(){
@@ -74,6 +74,9 @@ export default class Enemy extends Node{
             //console.log( this.scene.enemies.indexOf(this));
             this.alive = false;
             this.scene.enemies[this.id] = false;
+            this.scene.score += 100;
+            this.scene.money += 20;
+            this.scene.numOfEnemies --;
             console.log("dead");
             //if(this.id == 0){
             //    this.scene.enemies.shift();
