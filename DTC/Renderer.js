@@ -2,6 +2,7 @@ import * as WebGL from './WebGL.js';
 import shaders from './shaders.js';
 
 const mat4 = glMatrix.mat4;
+const vec3 = glMatrix.vec3;
 
 // This class prepares all assets for use with WebGL
 // and takes care of rendering.
@@ -173,14 +174,29 @@ export default class Renderer {
         return mvpMatrix;
     }
 
-    render(scene, camera) {
+    render(scene, camera, light) {
+    //render(scene, camera) {
         const gl = this.gl;
 
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         const program = this.programs.simple;
+        //const program = this.programs.phong;
         gl.useProgram(program.program);
+        
         gl.uniform1i(program.uniforms.uTexture, 0);
+
+        /*
+        gl.uniform1f(program.uniforms.uAmbient, light.ambient);
+        gl.uniform1f(program.uniforms.uDiffuse, light.diffuse);
+        gl.uniform1f(program.uniforms.uSpecular, light.specular);
+        gl.uniform1f(program.uniforms.uShininess, light.shininess);
+        gl.uniform3fv(program.uniforms.uLightPosition, light.position);
+        let color = vec3.clone(light.color);
+        vec3.scale(color, color, 1.0 / 255.0);
+        gl.uniform3fv(program.uniforms.uLightColor,  color);
+        gl.uniform3fv(program.uniforms.uLightAttenuation, light.attenuatuion);
+        */
 
         const mvpMatrix = this.getViewProjectionMatrix(camera);
 
@@ -212,6 +228,7 @@ export default class Renderer {
 
         if (node.mesh) {
             
+            //const program = this.programs.phong;
             const program = this.programs.simple;
             gl.uniformMatrix4fv(program.uniforms.uMvpMatrix, false, mvpMatrix);
             for (const primitive of node.mesh.primitives) {

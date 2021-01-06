@@ -6,6 +6,7 @@ import Bullet from './Bullet.js';
 import Enemy from './Enemy.js';
 import Tower from './Tower.js';
 import Waypoint from './Waypoint.js';
+import Light from './Light.js';
 
 
 const mat4 = glMatrix.mat4;
@@ -13,10 +14,15 @@ let paused = true;
 let wavePaused = true;
 let gameWon = false;
 let allWavesDone = false;
+let winPlayed = false;
+let losePlayed = false;
 document.getElementById("gameOver").style.visibility = "hidden";
 document.getElementById("gameWon").style.visibility = "hidden";
 document.getElementById("scoreDiv").style.visibility = "hidden";
+document.getElementById("gameEnd").style.visibility = "hidden";
 document.getElementById("overlay").style.visibility = "hidden";
+
+let audio;
 
 
 
@@ -46,6 +52,31 @@ const waves = [
         "wave" : 4,
         "type1": 5,
         "type2": 5
+    },
+    {
+        "wave" : 5,
+        "type1": 6,
+        "type2": 6
+    },
+    {
+        "wave" : 6,
+        "type1": 7,
+        "type2": 7
+    },
+    {
+        "wave" : 7,
+        "type1": 8,
+        "type2": 8
+    },
+    {
+        "wave" : 8,
+        "type1": 9,
+        "type2": 9
+    },
+    {
+        "wave" : 9,
+        "type1": 10,
+        "type2": 10
     }
 ];
 
@@ -63,6 +94,7 @@ class App extends Application {
 
         this.scene = await this.loader.loadScene(this.loader.defaultScene);
         this.camera = await this.loader.loadNode(2);
+        this.light = new Light();
         
 
         if (!this.scene || !this.camera) {
@@ -83,9 +115,6 @@ class App extends Application {
         document.getElementById("start").addEventListener('click', this.startGame);
         document.getElementById("nextWave").addEventListener('click', this.nextWave);
         
-
-        //pauseBtn.clickHandler = this.pauseGame.bind(this);
-
         this.clickHandler = this.clickHandler.bind(this);
         
 
@@ -104,7 +133,7 @@ class App extends Application {
         this.scene.money = 300;
 
         this.scene.waveNum = 0;
-        this.scene.dificulty = 0;
+        this.scene.difficulty = 0;
         
         
         this.renderer = new Renderer(this.gl);
@@ -141,40 +170,60 @@ class App extends Application {
         document.getElementById("13-1").addEventListener('click', this.btnClickHandler.bind(this));
         document.getElementById("14-0").addEventListener('click', this.btnClickHandler.bind(this));
         document.getElementById("14-1").addEventListener('click', this.btnClickHandler.bind(this));
+
+        document.getElementById("pauseMusic").addEventListener('click', this.pauseClickHandler.bind(this));
+        document.getElementById("playMusic").addEventListener('click', this.playClickHandler.bind(this));
+        
           
+    }
+
+    pauseClickHandler(e){
+        audio.pause();
+    }
+
+    playClickHandler(e){
+        audio.play();
     }
     
     startGame(){
         paused = false;
         document.getElementById("gameStart").style.visibility = "hidden";
         document.getElementById("overlay").style.visibility = "visible";
-
+        audio = new Audio('/sound/Calm and the Storm.mp3');
+        audio.play();
         //wavePaused = false;
         //console.log("start");
     }
     
     pauseGame(){
-        paused = true;
+        if(!paused) paused = true;
+        else if(paused) paused = false;
         //console.log("paused");
     }
 
     nextWave(){
+        
         paused = false;
         wavePaused = false;
+        
     }
 
     endGame(){
         document.getElementById("gameOver").style.visibility = "visible";
-        document.getElementById("score").style.visibility = "visible";
+        this.score += this.money;
+        document.getElementById("scoreDiv").style.visibility = "visible";
+        document.getElementById("restartDiv").style.visibility = "visible";
         document.getElementById("overlay").style.visibility = "hidden";
         paused = true;
     }
 
     winGame(){
-        console.log("hej u won");
+        console.log("hej you won");
+        this.score += this.money;
         gameWon = true;
         document.getElementById("gameWon").style.visibility = "visible";
         document.getElementById("scoreDiv").style.visibility = "visible";
+        document.getElementById("restartDiv").style.visibility = "visible";
         document.getElementById("overlay").style.visibility = "hidden";
 
     }
@@ -219,10 +268,20 @@ class App extends Application {
         }
         if(this.scene && this.scene.health<=0){
             this.endGame();
+            if(!losePlayed){
+                const loseAudio = new Audio('/sound/lose.mp3');
+                loseAudio.play();
+                losePlayed = true;
+            }
         }
         
         if(allWavesDone && this.scene.numOfEnemies<=0){
             this.winGame();
+            if(!winPlayed){
+                const winAudio = new Audio('/sound/win.mp3');
+                winAudio.play();
+                winPlayed = true;
+            }
         }
 
 
@@ -267,6 +326,12 @@ class App extends Application {
             if(!wavePaused && !gameWon){
                 this.createWave(dt);
             }
+
+            let difficulty = document.getElementById("difficulty").value;
+            if(difficulty=="easy") this.scene.difficulty = 0;
+            if(difficulty=="normal") this.scene.difficulty = 1;
+            if(difficulty=="hard") this.scene.difficulty = 2;
+            if(difficulty=="insane") this.scene.difficulty = 5;
                 
             document.getElementById("health").innerHTML = this.scene.health;
             document.getElementById("money").innerHTML = this.scene.money;
@@ -277,23 +342,9 @@ class App extends Application {
         
     }
 
-    enemiesAlive(){
-        for(const enemy in this.scene.enemies){
-            console.log(enemy);
-            console.log(enemy instanceof Enemy);
-
-
-            if(enemy instanceof Enemy) {
-                
-                return true;
-            }
-        }
-        return false;
-    }
-
     render() {
         if (this.renderer) {
-            this.renderer.render(this.scene, this.camera);
+            this.renderer.render(this.scene, this.camera, this.light);
         }
     }
 
@@ -310,11 +361,11 @@ class App extends Application {
 
     clickHandler(e) { 
         console.log(this.scene.enemies);
-        console.log(this.enemiesAlive());
     }
     
     createWave(dt){
         let wave = waves[this.scene.waveNum];
+        
         
         if(this.spawnCountown <= 0){
             
@@ -344,7 +395,6 @@ class App extends Application {
         //const m = this.scene.nodes[this.startIndex].matrix.map((x) => x);
         //console.log(this.scene);
         const tr = this.scene.nodes[this.startIndex].translation.map((x) => x);
-        
         let enemy = new Enemy(this.scene.enemies.length, tr, this.scene, type);
         
         this.scene.enemies.push(enemy);
@@ -378,10 +428,10 @@ class App extends Application {
         const tr = this.scene.nodes[node].translation.map((x) => x);
         let tower = new Tower(tr, this.scene, type);
         
-        this.scene.towers[id] = tower;
-        console.log(this.scene.towers);
-        
+        this.scene.towers[id] = tower;        
     }
+
+    
 
 }
 

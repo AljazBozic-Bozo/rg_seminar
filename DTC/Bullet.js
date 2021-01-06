@@ -3,6 +3,8 @@ import Node from './Node.js';
 const mat4 = glMatrix.mat4;
 const vec3 = glMatrix.vec3;
 
+let soundPlayed = false;
+
 export default class Bullet extends Node {
 
     constructor(bulletId, matrix, type, target, scene){
@@ -23,7 +25,7 @@ export default class Bullet extends Node {
             }
             else if(type==0){
                 this.mesh = this.scene.nodes[20].mesh;
-                this.bulletDamage = 2;
+                this.bulletDamage = 3;
             }
         }
         
@@ -33,7 +35,6 @@ export default class Bullet extends Node {
         this.target = target;
 
         this.bulletSpeed = 500;
-
 
         this.alive = true;
     }

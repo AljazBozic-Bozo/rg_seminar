@@ -3,6 +3,7 @@ import Node from './Node.js';
 
 const mat4 = glMatrix.mat4;
 const vec3 = glMatrix.vec3;
+let audio;
 
 export default class Enemy extends Node{
     
@@ -20,17 +21,24 @@ export default class Enemy extends Node{
         if(type == 0){ 
             this.scale = [0.5,0.5,0.5];
             this.mesh = scene.nodes[22].mesh;
+            
+            this.health = 10;
+            this.enemySpeed = 300;
         }
+
         if(type == 1){ 
             this.scale = [0.3,0.3,0.3];
             this.mesh = scene.nodes[23].mesh;
+            
+            this.health = 20;
+            this.enemySpeed = 200;
         }
+        this.health += 2*this.scene.difficulty;
+        this.enemySpeed += 2*this.scene.difficulty;
         
         this.waypointIndex = 0;
         this.waypoints = scene.waypoints;
-        this.health = 10;
-
-        this.enemySpeed = 200;
+        
         this.updateMatrix();
     }
     start(){
@@ -63,6 +71,8 @@ export default class Enemy extends Node{
                     this.alive = false;
                     this.scene.health -= this.health;
                     console.log("At the end");
+                    audio = new Audio('/sound/destroy.mp3');
+                    audio.play();
                     
                 }
             }
@@ -74,9 +84,11 @@ export default class Enemy extends Node{
             //console.log( this.scene.enemies.indexOf(this));
             this.alive = false;
             this.scene.enemies[this.id] = false;
-            this.scene.score += 100;
-            this.scene.money += 20;
+            this.scene.score += 100 + 1 * this.scene.difficulty;
+            this.scene.money += 20  + 1 * this.scene.difficulty;
             this.scene.numOfEnemies --;
+            audio = new Audio('/sound/destroy.mp3');
+            audio.play();
             console.log("dead");
             //if(this.id == 0){
             //    this.scene.enemies.shift();
