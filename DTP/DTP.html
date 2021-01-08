@@ -7,12 +7,12 @@
 
     <script type="text/javascript" src="../../lib/gl-matrix-min.js"></script>
     <script type="text/javascript" src="../../lib/dat.gui.min.js"></script>
-    <script type="module" src="DTC.js"></script>
+    <script type="module" src="DTP.js"></script>
 </head>
 <body>
     <div id="overlay">
         <div class="stats">Health: <span id="health"></span></div>
-        <div class="stats">Money: <span id="money"></span></div>
+        <div class="stats">Metal: <span id="money"></span></div>
         <div class="stats">Score: <span id="score"></span></div>
         <div class="stats">Wave: <span id="wave"></span></div>
         <div>
@@ -46,8 +46,63 @@
 
         
     </div>
-    <div id="gameStart">
-        <div>Defend the planet</div>
+    <div id="startDiv">
+        <div id="gameStart">Defend the planet</div>
+        <div id="instructions">
+            <p>Instructions</p>
+            <p>The aliens are attacking your planet! Its your your job to stop them!</p><br>
+            Using the gui on the right place towers on the coresponding spot.<br>
+            Every tower costs metal to construct.<br>
+            <p>There are two types of towers: red and blue towers</p>
+            <table>
+                <tr>
+                    <td>
+                        Red tower:
+                        <ul>
+                            <li>Fire rate: 1.5</li>
+                            <li>Range: 4</li>
+                            <li>Damage: 3</li>
+                            <li>Cost: 150</li>
+                        </ul>
+                    </td>
+                    <td>
+                        Blue tower:
+                        <ul>
+                            <li>Fire rate: 3</li>
+                            <li>Range: 5</li>
+                            <li>Damage: 1</li>
+                            <li>Cost: 100</li>
+                        </ul>
+                    </td>
+                </tr>
+            </table>
+            There are also two types of enemies
+            <table>
+                <tr>
+                    <td>
+                        Green enemy:
+                        <ul>
+                            <li>Health: 10</li>
+                            <li>Speed 300</li>
+                        </ul>
+                    </td>
+                    <td>
+                        Yelow enemy:
+                        <ul>
+                            <li>Health: 20</li>
+                            <li>Speed 200</li>
+                        </ul>
+                    </td>
+                </tr>
+            </table>
+            Once in game you have the option of changin the difficulty of the game using the drop down menu in the gui. <br>The higher the difficulty the higher the score gets.
+            <p>The pause button pauses the game and continues the game if pressed again.</p>
+            <p>After every wave the game pauses to give you time to place towers. <br>Once you are ready just press the "Start wave" button for the next game.</p>
+            <p>At the bottom of the gui are music controls to pause or play the background music.</p>
+            In the top right corner is the button to change your perspective of the game. <br>You are able to move the camera and move around using the WASD keys.
+            <p>The game is won by defeating all 10 waves.</p>
+            <p>You lose if your planet health goes down to zero.</p>
+        </div>
         <button class="myButton" id="start">Start Game</button>
     </div>
     <div id="gameEnd">

@@ -21,6 +21,7 @@ document.getElementById("gameWon").style.visibility = "hidden";
 document.getElementById("scoreDiv").style.visibility = "hidden";
 document.getElementById("gameEnd").style.visibility = "hidden";
 document.getElementById("overlay").style.visibility = "hidden";
+document.getElementById("gameStart").style.visibility = "visible";
 
 let audio;
 
@@ -188,6 +189,7 @@ class App extends Application {
     startGame(){
         paused = false;
         document.getElementById("gameStart").style.visibility = "hidden";
+        document.getElementById("startDiv").style.visibility = "hidden";
         document.getElementById("overlay").style.visibility = "visible";
         audio = new Audio('/sound/Calm and the Storm.mp3');
         audio.play();
