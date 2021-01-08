@@ -9,3 +9,6 @@ python -m http.server
 ```
 
 You can also use visual studio Live server plugin to run localy.
+
+# Video Demo
+https://youtu.be/VJpnZcTcVew
